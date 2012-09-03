@@ -1,4 +1,4 @@
-package com.shanekumpf;
+package com.shanekumpf.logdemo;
 /**
  * Drives the logging demonstration using a default and externally provided
  * logger configuration.

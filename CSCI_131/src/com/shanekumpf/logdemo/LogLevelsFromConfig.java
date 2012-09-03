@@ -1,4 +1,4 @@
-package com.shanekumpf;
+package com.shanekumpf.logdemo;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;

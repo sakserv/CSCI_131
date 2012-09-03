@@ -1,3 +1,4 @@
+package com.shanekumpf.stringlenval;
 import java.util.logging.Logger;
 
 /**

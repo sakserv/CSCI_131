@@ -1,3 +1,4 @@
+package com.shanekumpf.stringlenval;
 /**
  * Thrown when the length of a string is outside of a predetermined range.
  *  
