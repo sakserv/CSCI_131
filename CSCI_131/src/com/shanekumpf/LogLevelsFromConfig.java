@@ -1,45 +1,36 @@
-import java.util.logging.Logger;
+package com.shanekumpf;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.io.IOException;
+import java.io.InputStream;
 /**
- * Demonstrate the various log levels availble in 
- * {@link java.util.logging.Logger}.
+ * Provides logging facilities using an external configuration from the default
+ * package.
  * 
  * @author Shane Kumpf
  * @version 0.1
  * @since 1.6
+ *
  */
-public class LogLevels {
+public class LogLevelsFromConfig extends LogLevels {
 
 	Logger logger;
+	final InputStream inputStream = getClass().getResourceAsStream("/logging.properties");
 	
 	/**
-	 * Provides a default logger instance
-	 * 
+	 * Reads in the logginig properties from the default package and sets up
+	 * a default logger.
 	 */
-	public LogLevels() {
-		logger = Logger.getLogger("LogLevels");
+	public LogLevelsFromConfig() {
+		try {
+			LogManager.getLogManager().readConfiguration(inputStream);
+		} catch(IOException e) {
+			Logger.getAnonymousLogger().severe("Could not load logging.properties" + e.getMessage());
+		}
+		logger = Logger.getLogger("com.shanekumpf");
 	}
-	
-	/**
-	 * Allows for a user provided logger to be supplied.
-	 * 
-	 * @param logger		logger instance to log to.
-	 * @see Logger
-	 */
-	public LogLevels(Logger logger) {
-		this.logger = logger;
-	}
-	
-	/**
-	 * Sets the log level threshold, messages under this threshold are not
-	 * logged.
-	 * 
-	 * @param Level		log level
-	 * @see Level
-	 */
-	public void setLogLevel(Level logLevel) {
-		logger.setLevel(logLevel);
-	}
+
 	
 	/**
 	 * Logs a {@link Level.SEVERE} level message.

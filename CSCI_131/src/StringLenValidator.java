@@ -16,6 +16,13 @@ public class StringLenValidator {
 	private int minLen = 1; // default minimum string length
 	private int maxLen = 10; // default maximum string length
 
+	/**
+	 * Using conditionals determine if a string length is within a given range.
+	 * 
+	 * @param string	string to be validated
+	 * @return boolean	false if string len is out of range.
+	 * @throws StringSizeException
+	 */
 	public boolean validateStringIf(String string) throws StringSizeException {
 		if (!checkStringLen(string)) {
 			throw new StringSizeException("The length of the string " + string + 
@@ -27,20 +34,26 @@ public class StringLenValidator {
 		}
 	}
 	
-	public boolean validateStringAssert(String string) 
-			throws StringSizeException {
+	/**
+	 * Using assertions determine if a string length is within a given range.
+	 * 
+	 * @param string	string to be validated
+	 * @return boolean	false if string len is out of range.
+	 */
+	public boolean validateStringAssert(String string) { 
 		
-		try {
-			assert checkStringLen(string);
-		}
-		catch (AssertionError e) {
-			throw new StringSizeException("The length of the string " + string + 
-					" is outside of the allowed range. (MIN: " + this.minLen +
-					" MAX: " + this.maxLen + ") (Assert)");
-		}
+		assert checkStringLen(string) : "The length of the string " + 
+				string + " is outside of the allowed range. (MIN: " + 
+				this.minLen + " MAX: " + this.maxLen + ") (Assert)";
 		return true;
 	}
 	
+	/**
+	 * Validates the string length is within the min and max values.
+	 * 
+	 * @param string	string to be validated
+	 * @return boolean	false if string length is outside of the provided range.
+	 */
 	private boolean checkStringLen(String string) {
 		Integer stringLen = string.length();
 		if (stringLen < this.minLen || stringLen > this.maxLen) {
@@ -49,16 +62,29 @@ public class StringLenValidator {
 		return true;
 	}
 	
+	/**
+	 * Max string length setter.
+	 * 
+	 * @param maxLen	max string length
+	 */
 	public void setMaxLen(Integer maxLen) {
 		this.maxLen = maxLen;
 	}
 	
+	/**
+	 * Min string length setter.
+	 * 
+	 * @param minLen	min string length
+	 */
 	public void setMinLen(Integer minLen) {
 		this.minLen = minLen;
 	}
 	
 	/**
-	 * @param args
+	 * Tests various string sizes against the conditional and assertion based
+	 * checking.
+	 * 
+	 * @param args 	cmdline args
 	 */
 	public static void main(String[] args) {
 		
@@ -94,26 +120,17 @@ public class StringLenValidator {
 		slv.setMinLen(1);
 		slv.setMaxLen(5);	
 		inputString = "Shane";
-		try {
-			slv.validateStringAssert(inputString);
-			System.out.println(inputString + " is within range. (Assert)");
-		}
-		catch(StringSizeException e) {
-			System.out.println(e.toString());
-		}
+		slv.validateStringAssert(inputString);
+		System.out.println(inputString + " is within range. (Assert)");
+
 		
 		
 		// Assertion failure test
 		slv.setMinLen(1);
-		slv.setMaxLen(4);	
+		slv.setMaxLen(3);	
 		inputString = "Shane";
-		try {
-			slv.validateStringAssert(inputString);
-			System.out.println(inputString + " is within range. (Assert)");
-		}
-		catch(StringSizeException e) {
-			System.out.println(e.toString());
-		}
+		slv.validateStringAssert(inputString);
+		System.out.println(inputString + " is within range. (Assert)");
 
 	}
 
