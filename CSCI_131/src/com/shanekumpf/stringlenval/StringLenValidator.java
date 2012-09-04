@@ -1,5 +1,4 @@
 package com.shanekumpf.stringlenval;
-import java.util.logging.Logger;
 
 /**
  * Provides string length validation methods using assertion or or conditional
@@ -11,8 +10,6 @@ import java.util.logging.Logger;
  *
  */
 public class StringLenValidator {
-	
-	Logger logger = Logger.getLogger("StringLenValidator");
 	
 	private int minLen = 1; // default minimum string length
 	private int maxLen = 10; // default maximum string length
