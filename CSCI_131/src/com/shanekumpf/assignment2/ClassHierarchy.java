@@ -1,5 +1,8 @@
 package com.shanekumpf.assignment2;
 
+import java.util.ArrayList;
+import csci130.KeyboardReader;
+
 /**
  * Provides utilities for printing out a class heirarchy in forward and reverse
  * order.
@@ -43,7 +46,8 @@ public class ClassHierarchy {
 	/**
 	 * Prints out the class hierarchy of the provided class instance, starting 
 	 * at java.lang.Object. (Recurse)
-	 * @param args
+	 * 
+	 * @param cls	class instance to walk
 	 */
 	static void printClassHeirarchyFromObjectRecurse(Class<?> cls) {
 		if (cls.getName() != "java.lang.Object") {
@@ -52,12 +56,47 @@ public class ClassHierarchy {
 		System.out.println(cls.getName());
 	}
 	
+	
+	/**
+	 * Prints out the class hierarchy of the provided class instance, starting
+	 * at java.lang.Object. (Explicit)
+	 * 
+	 * @param cls	class instance to walk
+	 */
+	static void printClassHeirarchyFromObjectExplicit(Class<?> cls) {
+		ArrayList<String> clsHeir = new ArrayList<String>();
+		while (cls.getName() != "java.lang.Object") {
+			clsHeir.add(cls.getName());
+			cls = cls.getSuperclass();
+		}
+		clsHeir.add("java.lang.Object");
+		for (int i = clsHeir.size() - 1; i >= 0; i--) {
+			System.out.println(clsHeir.get(i));
+		}
+	}
+	
+	
 	public static void main(String[] args) {
-		printClassHeirarchyFromUserRecurse(javax.swing.JSplitPane.class);
-		System.out.println();
-		printClassHeirarchyFromUserExplicit(javax.swing.JSplitPane.class);
-		System.out.println();
-		printClassHeirarchyFromObjectRecurse(javax.swing.JSplitPane.class);
+		System.out.print("Enter a full class name to be walked: ");
+		String resp = KeyboardReader.readLine();
+		try {
+			Class<?> cls = Class.forName(resp);
+			
+			System.out.println("\nFrom User Recurse: ");
+			printClassHeirarchyFromUserRecurse(cls);
+			
+			System.out.println("\nFrom User Explicit: ");
+			printClassHeirarchyFromUserExplicit(cls);
+			
+			System.out.println("\nFrom java.lang.Object Recurse: ");
+			printClassHeirarchyFromObjectRecurse(cls);
+			
+			System.out.println("\nFrom java.lang.Object Explicit: ");
+			printClassHeirarchyFromObjectExplicit(cls);
+			
+		} catch (ClassNotFoundException e) {
+			System.out.println("ERROR: Invalid class specified: " + resp);
+		}
 	}
 
 }
