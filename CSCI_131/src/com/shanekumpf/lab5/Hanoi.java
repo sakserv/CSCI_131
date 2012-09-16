@@ -11,7 +11,7 @@ public class Hanoi {
 
     public Hanoi(int numDisks) {
         this.numDisks = numDisks;
-        this.moves = new Move[(int)Math.pow(2, numDisks) - 1];
+        this.moves = new Move[(int)Math.pow(2, numDisks + 1) - 1];
     }
 
     public Move[] solve(int sourcePegNum, int destPegNum, int tempPegNum) {
@@ -26,16 +26,18 @@ public class Hanoi {
         }
     }
 
-    private void recurse(int numDisks, int sourcePegNum1, int destPegNum3,
-            int tempPegNum2) {
+    private void recurse(int numDisks, int sourcePegNum, int destPegNum,
+            int tempPegNum) {
         if (numDisks == 0) {
-                System.out.println(sourcePegNum1 + " --> " + destPegNum3);
+                moves[moveCounter] = new Move(sourcePegNum,destPegNum);
+                moveCounter += 1;
                 return;
         }
 
-        recurse(numDisks - 1, sourcePegNum1, tempPegNum2, destPegNum3);
-        System.out.println(sourcePegNum1 + " --> " + destPegNum3);
-        recurse(numDisks - 1, tempPegNum2, destPegNum3, sourcePegNum1);
+        recurse(numDisks - 1, sourcePegNum, tempPegNum, destPegNum);
+        moves[moveCounter] = new Move(sourcePegNum,destPegNum);
+        moveCounter += 1;
+        recurse(numDisks - 1, tempPegNum, destPegNum, sourcePegNum);
     }
 
     public static void main(String[] args) {
@@ -53,7 +55,7 @@ public class Hanoi {
 
         Hanoi hanoi = new Hanoi(numDisks);
         hanoi.solve(sourcePegNum, destPegNum, tempPegNum);
-        //hanoi.printMoves();
+        hanoi.printMoves();
     }
 }
 
