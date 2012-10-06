@@ -41,7 +41,7 @@ public class Factorial {
     
     public static void main(String[] args) {
         System.out.print("Enter an int: ");
-        int resp = KeyboardReader.readInt();
+        int resp = KeyboardReaderNG.readInt();
         System.out.println("\nYou entered: " + resp);
         System.out.println("Recursive: " + factorialRecurse(resp));
         System.out.println("Explicit: " + factorialLoop(resp));

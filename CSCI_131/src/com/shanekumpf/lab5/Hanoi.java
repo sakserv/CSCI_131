@@ -1,7 +1,7 @@
 package com.shanekumpf.lab5;
 
 
-import csci130.*;
+import csci130.KeyboardReaderNG;
 
 public class Hanoi {
 
@@ -42,16 +42,16 @@ public class Hanoi {
 
     public static void main(String[] args) {
         System.out.print("\nEnter the total number of disks to move: ");
-        int numDisks = KeyboardReader.readInt();
+        int numDisks = KeyboardReaderNG.readInt();
 
         System.out.print("\nEnter the start peg number: ");
-        int sourcePegNum = KeyboardReader.readInt();
+        int sourcePegNum = KeyboardReaderNG.readInt();
 
         System.out.print("\nEnter the destination peg number: ");
-        int destPegNum = KeyboardReader.readInt();
+        int destPegNum = KeyboardReaderNG.readInt();
 
         System.out.print("\nEnter the temp peg number: ");
-        int tempPegNum = KeyboardReader.readInt();
+        int tempPegNum = KeyboardReaderNG.readInt();
 
         Hanoi hanoi = new Hanoi(numDisks);
         hanoi.solve(sourcePegNum, destPegNum, tempPegNum);

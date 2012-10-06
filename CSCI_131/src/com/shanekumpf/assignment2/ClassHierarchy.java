@@ -1,7 +1,8 @@
 package com.shanekumpf.assignment2;
 
 import java.util.ArrayList;
-import csci130.KeyboardReader;
+
+import csci130.KeyboardReaderNG;
 
 /**
  * Provides utilities for printing out a class heirarchy in forward and reverse
@@ -78,7 +79,7 @@ public class ClassHierarchy {
 	
 	public static void main(String[] args) {
 		System.out.print("Enter a full class name to be walked: ");
-		String resp = KeyboardReader.readLine();
+		String resp = KeyboardReaderNG.readLine();
 		try {
 			Class<?> cls = Class.forName(resp);
 			
