@@ -134,8 +134,7 @@ public class CA {
 		} finally {
 			try {
 				writer.close();
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		}
 	}
 
@@ -156,6 +155,7 @@ public class CA {
 				}
 			}
 		}
+		save();
 	}
 
 	/**
@@ -245,9 +245,6 @@ public class CA {
 
 		CA ca = new CA(gridSize, initialProbability, minNeighbours,
 				maxNeighbours, maxGenerations, modulus, fileName);
-
-		// For testing
-		// CA ca = new CA(10, 0.60, 2, 3, 50, 1, "C:/testfile.txt");
 
 		boolean nextGenAvailable;
 		do {
