@@ -2,12 +2,14 @@ package com.shanekumpf.lab14;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Pool extends Thread {
 
 	private long workerThreadCount;
 	private final Object SEMAPHORE;
-	private ArrayList<Runnable> workWaiting;
+	private Queue<Runnable> workWaiting;
 	private boolean canRun = true;
 
 	private ArrayList<Worker> workersNeedWork;
@@ -15,7 +17,7 @@ public class Pool extends Thread {
 
 	public Pool() {
 		SEMAPHORE = new Object();
-		workWaiting = new ArrayList<Runnable>();
+		workWaiting = new LinkedList<Runnable>();
 		workersNeedWork = new ArrayList<Worker>();
 		workersHaveWork = new ArrayList<Worker>();
 	}
@@ -31,6 +33,7 @@ public class Pool extends Thread {
 	public void addWork(Runnable r) {
 		synchronized (SEMAPHORE) {
 			workWaiting.add(r);
+			SEMAPHORE.notifyAll();
 		}
 	}
 
@@ -55,46 +58,47 @@ public class Pool extends Thread {
 					continue;
 				} catch (InterruptedException ie) {}
 			}
-			
-			System.out.println("WAITING: " + workWaiting.size());
-			System.out.println("NEED WORK: " + workersNeedWork.size());
-			System.out.println("HAVE WORK: " + workersHaveWork.size());
 
-			synchronized (SEMAPHORE) {
+			synchronized (SEMAPHORE) {			
 				int currentWorkerCount = workersNeedWork.size()	+ workersHaveWork.size();
-				if (workersNeedWork.size() == 0	&& currentWorkerCount <= workerThreadCount) {
+				if (workersNeedWork.size() == 0	&& currentWorkerCount < workerThreadCount) {
 					workersNeedWork.add(new Worker());
+				}
 					
-				} else if(workersNeedWork.size() > 0) {
-					// TODO: This area not working as expected.
+				if(workersNeedWork.size() > 0) {
+					
 					for(int i = 0; i < workersNeedWork.size(); i++) {
 						
-						//System.out.println(workersNeedWork.get(0).toString());
 						Worker worker = workersNeedWork.get(i);
 						worker.setPool(this);
 					
 						try {
-							worker.setWork(workWaiting.get(i));
-						} catch(ConcurrentModificationException cme) {
-							workersNeedWork.remove(worker);
+							worker.setWork(workWaiting.peek());
+							workersNeedWork.remove(i);
 							workersHaveWork.add(worker);
+							workWaiting.poll();
+						} catch(ConcurrentModificationException cme) {
 							continue;
 						}
-					
-						worker.start();
-						workersNeedWork.remove(worker);
-						workersHaveWork.add(worker);
-						workWaiting.remove(i);
+						
+						if(!worker.isAlive()) {
+							worker.start();
+						}
 					}
 					
 				} else {
 					System.out.println("No workers available");
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException ie) {}
 				}
 				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException ie) {}
 			}
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException ie) {}
+		
 		}
 	}
 

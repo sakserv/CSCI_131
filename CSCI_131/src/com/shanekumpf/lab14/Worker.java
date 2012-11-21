@@ -8,6 +8,7 @@ public class Worker extends Thread {
 	Pool pool;
 	Runnable work;
 	boolean canRun = true;
+	boolean workInProgress = false;
 	
 	public Worker() {
 		SEMAPHORE = new Object();
@@ -23,10 +24,11 @@ public class Worker extends Thread {
 	
 	public void setWork(Runnable work) {
 		synchronized(SEMAPHORE) {
-			if(this.isAlive()) {
+			if(workInProgress) {
 				throw new ConcurrentModificationException(this.getName() + " is already executing a Runnable");
 			}
 			this.work = work;
+			workInProgress = true;
 		}
 	}
 	
@@ -38,12 +40,19 @@ public class Worker extends Thread {
 	
 	public void run() {
 		while(canRun) {
-			try {
-				synchronized(SEMAPHORE) {
-					work.run();
+			synchronized(SEMAPHORE) {
+				if (work != null) {
+					Thread workThread = new Thread(work);
+					workThread.start();
+					while(workThread.getState().equals(State.NEW) || workThread.getState().equals(State.RUNNABLE) || workThread.getState().equals(State.BLOCKED)) {
+						try {
+							Thread.sleep(100);
+						} catch(InterruptedException ie) {}
+					}
+					workInProgress = false;
+					pool.workerHasFinished(this);
+					work = null;
 				}
-			} finally {
-				pool.workerHasFinished(this);
 			}
 		}
 	}

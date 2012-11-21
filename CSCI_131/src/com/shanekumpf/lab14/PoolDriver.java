@@ -7,8 +7,12 @@ public class PoolDriver {
 		pool.setWorkerThreadCount(2);
 		pool.addWork(new RunTest());
 		pool.addWork(new RunTest());
-		pool.addWork(new RunTest());
-		pool.addWork(new RunTest());
 		pool.start();
+		pool.addWork(new RunTest());
+		pool.addWork(new RunTest());
+		pool.addWork(new RunTest());
+		pool.addWork(new RunTest());
+		pool.addWork(new RunTest());
+		pool.addWork(new RunTest());
 	}
 }
